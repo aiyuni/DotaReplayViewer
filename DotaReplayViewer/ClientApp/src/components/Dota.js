@@ -77,7 +77,6 @@ export class Dota extends React.Component {
                     <input type="submit" value="Submit" />
                 </form>
 
-                <Dota obtainedMatchData={true}/>,
                 <table className="table table-stripled">
                     <thead>
                         <tr>

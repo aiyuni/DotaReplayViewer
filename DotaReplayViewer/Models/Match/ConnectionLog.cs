@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace DotaReplayViewer
 {
-    class Replay
+    public class ConnectionLog
     {
-        public long match_id { get; set; }
-        public int cluster { get; set; }
-        public int replay_salt { get; set; }
+        public int time { get; set; }
+        public string @event { get; set; }
+        public int player_slot { get; set; }
     }
 }

@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace DotaReplayViewer
 {
-    class Replay
+    public class KilledBy
     {
-        public long match_id { get; set; }
-        public int cluster { get; set; }
-        public int replay_salt { get; set; }
     }
 }
