@@ -16,6 +16,8 @@ export class Dota extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.getMatchDetails = this.getMatchDetails.bind(this);
+        this.handleMatchIdChange = this.handleMatchIdChange.bind(this);
+        this.onSelectHero = this.onSelectHero.bind(this);
     }
 
     //incrementCounter() {
@@ -34,8 +36,8 @@ export class Dota extends React.Component {
         //console.log("test: " + Object.keys(result));
         //this.setState({ heroNames: Object.keys(result) });
 
-        
-        fetch('api/Dota/GetMatchDetails/5165102419')
+
+         fetch('api/Dota/GetMatchDetails/' + this.state.matchId)
             .then(response => {
                 console.log("inside first fetch");
                 //this.setState({ heroNames: Object.keys(response.json()) });
@@ -58,8 +60,17 @@ export class Dota extends React.Component {
     }
 
     handleSubmit(event) {
-        console.log("match id was submitted: " + this.state.matchId);
+        //console.log("match id was submitted: " + this.matchId);
         event.preventDefault();
+    }
+
+    handleMatchIdChange(event) {
+        console.log("match id was changed: " + this.state.matchId);
+        this.setState({matchId: event.target.value });
+    }
+
+    onSelectHero(hero) {
+        console.log("hero selected is: " + hero);
     }
 
     render() {
@@ -72,29 +83,30 @@ export class Dota extends React.Component {
                 <form onSubmit={this.getMatchDetails}>
                     <label>
                         Match Id:
-                        <input type="text" value={this.state.value} onChange={this.handleChange} />
+                        <input type="text" value={this.state.value} onChange={this.handleMatchIdChange} />
                     </label>
                     <input type="submit" value="Submit" />
                 </form>
 
-                <Dota obtainedMatchData={true}/>,
-                <table className="table table-stripled">
-                    <thead>
-                        <tr>
-                            <th>Hero Name</th>
-                            <th>Player Slot</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.state.heroesArray.map((x, i)=>
-                            <tr key={i}>
-                                <td>{x.heroName}</td>
-                                <td>{x.playerSlot}</td>
+                {this.state.obtainedMatchData &&
+                    <table className="table table-stripled">
+                        <thead>
+                            <tr>
+                                <th>Hero Name</th>
+                                <th>Player Slot</th>
                             </tr>
+                        </thead>
+                        <tbody>
+                        {this.state.heroesArray.map((x, i) =>
+                            <tr onClick={this.onSelectHero(x.heroName)} key={i}>
+                                    <td>{x.heroName}</td>
+                                    <td>{x.playerSlot}</td>
+                                </tr>
 
-                        )}
-                    </tbody>
-                </table>
+                            )}
+                        </tbody>
+                    </table>
+                }
                         
             </div>
         );
