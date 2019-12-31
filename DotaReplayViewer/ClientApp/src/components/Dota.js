@@ -18,6 +18,7 @@ export class Dota extends React.Component {
         this.getMatchDetails = this.getMatchDetails.bind(this);
         this.handleMatchIdChange = this.handleMatchIdChange.bind(this);
         this.onSelectHero = this.onSelectHero.bind(this);
+        this.render = this.render.bind(this);
     }
 
     //incrementCounter() {
@@ -69,8 +70,16 @@ export class Dota extends React.Component {
         this.setState({matchId: event.target.value });
     }
 
-    onSelectHero(hero) {
-        console.log("hero selected is: " + hero);
+    onSelectHero(playerSlot) {
+        console.log("player slot is: " + playerSlot);
+        if (playerSlot >= 128) {
+            playerSlot -= 122;
+        }
+
+        fetch('api/Dota/StartReplay/' + this.state.matchId + "/" + playerSlot)
+            .then(response => {
+                console.log("inside startReplay fetch");
+            })
     }
 
     render() {
@@ -97,8 +106,8 @@ export class Dota extends React.Component {
                             </tr>
                         </thead>
                         <tbody>
-                        {this.state.heroesArray.map((x, i) =>
-                            <tr onClick={this.onSelectHero(x.heroName)} key={i}>
+                            {this.state.heroesArray.map((x, i) =>
+                                <tr onClick={() => this.onSelectHero(x.playerSlot)} key={i}>
                                     <td>{x.heroName}</td>
                                     <td>{x.playerSlot}</td>
                                 </tr>
@@ -107,7 +116,7 @@ export class Dota extends React.Component {
                         </tbody>
                     </table>
                 }
-                        
+
             </div>
         );
     }
