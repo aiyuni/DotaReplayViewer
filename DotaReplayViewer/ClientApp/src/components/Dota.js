@@ -30,7 +30,6 @@ export class Dota extends React.Component {
      getMatchDetails(event) {
 
          this.setState({ obtainedMatchData: false });
-         this.setState({ matchId: "999"});
          console.log("inside getMatchDetails");
         //let response = await fetch('api/Dota/GetMatchDetails/5165102419');
         //let result = await response.json();

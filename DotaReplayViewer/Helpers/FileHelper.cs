@@ -16,7 +16,7 @@ namespace DotaReplayViewer.Helpers
     public class FileHelper
     {
         private readonly IConfiguration config;
-        public static string ReplayFolder = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\dota 2 beta\\game\\dota\\replays";
+        public static string ReplayFolder = Constants.ReplayFolderAbsolutePath;
         //public static string ReplayFolder = ConfigurationManager.AppSettings["ReplayFolder"];
         //public static string ReplayFolder;
         private static FileSystemWatcher watcher = new FileSystemWatcher();

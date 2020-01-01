@@ -27,9 +27,9 @@ namespace DotaReplayViewer.Controllers
         [DllImport("user32.dll")]
         public static extern int SetForegroundWindow(IntPtr hWnd);
         public static long matchID = 5164275078; //5164022682; //5163131785 for 13:46 long //5164286766 for 1v1
-        public static string replayFolder = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\dota 2 beta\\game\\dota\\replays";
-        //public static string ReplayFolder = ConfigurationManager.AppSettings["ReplayFolder"];
         private static readonly HttpClient client = new HttpClient();
+
+        private static int matchDurationSeconds;
 
         [HttpGet("GetMatchDetails/{matchId}")]
         public async Task<IActionResult> GetMatchDetails(long matchId)
@@ -45,7 +45,7 @@ namespace DotaReplayViewer.Controllers
 
             //Get match details and store hero/player_slot info in map
             List<PlayerDetail> playersDetails = await MatchDetailsHelper.RequestMatchDetails(matchId);
-            int matchDurationSeconds = await MatchDetailsHelper.GetMatchLength(matchId);
+            matchDurationSeconds = await MatchDetailsHelper.GetMatchLength(matchId);
 
             return Ok(JsonConvert.SerializeObject((playersDetails)));
         }
@@ -53,11 +53,16 @@ namespace DotaReplayViewer.Controllers
         [HttpGet("startReplay/{matchID}/{playerSlot}")]
         public async Task<IActionResult> StartReplay (long matchID, int playerSlot)
         {
+            Debug.WriteLine("Match id is: " + matchID);
             bool success = await DotaClientHelper.LaunchDota();
             Debug.Write("success when starting dota is: " + success);
 
             await DotaClientHelper.StartReplay(playerSlot, matchID);
 
+            await ObsStudioHelper.StartObs();
+            Debug.Write("watching for ths many seconds:  " + matchDurationSeconds);
+            await ObsStudioHelper.WatchObs(matchDurationSeconds);
+            await ObsStudioHelper.StopObs();
             return Ok(200);
         }
 

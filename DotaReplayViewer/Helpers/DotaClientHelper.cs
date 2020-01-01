@@ -18,7 +18,7 @@ namespace DotaReplayViewer.Helpers
             var dota = Process.GetProcessesByName("dota2");
             if (dota.Length == 0)
             {
-                Process.Start("C:\\Program Files (x86)\\Steam\\steamapps\\common\\dota 2 beta\\game\\bin\\win64\\dota2.exe");
+                Process.Start(Constants.DotaAbsolutePath);
                 await Task.Delay(10000);  //wait for Dota to finish loading...
             }
 
@@ -37,7 +37,7 @@ namespace DotaReplayViewer.Helpers
             System.Diagnostics.Debug.WriteLine("sending inputs...");
 
             var ahk = new AutoHotkey.Interop.AutoHotkeyEngine();
-            ahk.LoadFile("../../test.ahk");
+            ahk.LoadFile(Constants.AhkRelativeFilePath);
             ahk.ExecFunction("TestSend");
             ahk.ExecFunction("WatchThisReplay", matchID.ToString(), playerSlot.ToString());
         }
