@@ -64,7 +64,7 @@ namespace DotaReplayViewer.Helpers
                     }
                     catch (Exception e)
                     {
-                        Debug.Write("something went wrong");
+                        Debug.Write("something went wrong: " + e.Message);
                     }
                 }
 

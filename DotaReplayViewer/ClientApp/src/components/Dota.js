@@ -77,7 +77,7 @@ export class Dota extends React.Component {
 
         fetch('api/Dota/StartReplay/' + this.state.matchId + "/" + playerSlot)
             .then(response => {
-                console.log("inside startReplay fetch");
+                console.log("inside StartReplay fetch");
             })
     }
 

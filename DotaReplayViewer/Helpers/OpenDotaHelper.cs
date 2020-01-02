@@ -42,17 +42,18 @@ namespace DotaReplayViewer.Helpers
         public static JObject GetMatchDetails(Match match)
         {
             JObject matchDetails = new JObject();
-            List<Player> players = new List<Player>();
+            JArray players = new JArray();
 
             foreach (var p in match.players)
             {
                 JObject player = new JObject();
                 Hero hero = GetHeroFromId(p.hero_id);
                 player.Add("player_slot", p.player_slot);
-                player.Add("hero", JsonConvert.SerializeObject(hero));   
+                player.Add("hero", JObject.FromObject(hero));
+                players.Add(player);
             }
 
-            matchDetails.Add("players", JsonConvert.SerializeObject(players));
+            matchDetails.Add("players", players);
 
             return matchDetails;
         }
