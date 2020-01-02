@@ -67,7 +67,7 @@ namespace DotaReplayViewer.Helpers
 
         public static string BuildReplayUrl(long matchId, int cluster, int replaySalt)
         {
-            string url = cluster == 236 ? ".wmsj.cn / 570 /" : ".valve.net/570/";
+            string url = cluster == 236 ? ".wmsj.cn/570/" : ".valve.net/570/";
             return $"http://replay{cluster}{url}{matchId}_{replaySalt}.dem.bz2";
         }
     }
