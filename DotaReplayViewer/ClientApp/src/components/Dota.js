@@ -29,15 +29,8 @@ export class Dota extends React.Component {
             });
     }
 
-    handleChange(event) {
-        console.log("match id was changed: " + this.state.matchId);
-    }
-
-    handleSubmit(event) {
-        event.preventDefault();
-    }
-
     handleMatchIdChange(event) {
+        console.log("match id was changed: " + event.target.value);
         this.setState({ matchId: event.target.value });
     }
 
