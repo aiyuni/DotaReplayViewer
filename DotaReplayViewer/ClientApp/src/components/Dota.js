@@ -96,27 +96,12 @@ export class Dota extends React.Component {
                     <input type="submit" value="Submit" />
                 </form>
 
-<<<<<<< HEAD
-                <table className="table table-stripled">
-                    <thead>
-                        <tr>
-                            <th>Hero Name</th>
-                            <th>Player Slot</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.state.heroesArray.map((x, i)=>
-                            <tr key={i}>
-                                <td>{x.heroName}</td>
-                                <td>{x.playerSlot}</td>
-=======
                 {this.state.obtainedMatchData &&
                     <table className="table table-stripled">
                         <thead>
                             <tr>
                                 <th>Hero Name</th>
                                 <th>Player Slot</th>
->>>>>>> a36bd75f61a9a4487eeb2d5896fa350fcabe9870
                             </tr>
                         </thead>
                         <tbody>
