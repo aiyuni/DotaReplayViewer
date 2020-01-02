@@ -10,8 +10,6 @@ export class Dota extends React.Component {
             matchId: 0, players: null
         }
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
         this.getMatchDetails = this.getMatchDetails.bind(this);
         this.handleMatchIdChange = this.handleMatchIdChange.bind(this);
         this.onSelectHero = this.onSelectHero.bind(this);
