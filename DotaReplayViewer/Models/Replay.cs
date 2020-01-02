@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DotaReplayViewer
+﻿namespace DotaReplayViewer.Models
 {
-    class Replay
+    public class Replay
     {
         public long match_id { get; set; }
         public int cluster { get; set; }

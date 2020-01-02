@@ -1,4 +1,4 @@
-﻿namespace DotaReplayViewer
+﻿namespace DotaReplayViewer.Models
 {
     public class Hero
     {
