@@ -28,7 +28,7 @@ namespace DotaReplayViewer.Helpers
 
         }
 
-        public static async Task StartReplay(int playerSlot, long matchID)
+        public static void StartReplay(int playerSlot, long matchID)
         {
             IntPtr h = Dota.MainWindowHandle;
             SetForegroundWindow(h);

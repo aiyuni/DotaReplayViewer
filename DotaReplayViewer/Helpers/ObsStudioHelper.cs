@@ -42,7 +42,7 @@ namespace DotaReplayViewer.Helpers
             await Task.Delay(durationInSeconds * 1000);
         }
 
-        public static async Task StopObs()
+        public static void StopObs()
         {
             Debug.WriteLine("Stopping stream..at: " + DateTime.Now);
             obs = Process.GetProcessesByName("obs64").FirstOrDefault();

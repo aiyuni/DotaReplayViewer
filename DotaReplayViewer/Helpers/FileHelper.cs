@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.BZip2;
-using System.Web;
 using Microsoft.Extensions.Configuration;
 
 namespace DotaReplayViewer.Helpers
@@ -17,9 +12,7 @@ namespace DotaReplayViewer.Helpers
     {
         private readonly IConfiguration config;
         public static string ReplayFolder = Constants.ReplayFolderAbsolutePath;
-        //public static string ReplayFolder = ConfigurationManager.AppSettings["ReplayFolder"];
-        //public static string ReplayFolder;
-        private static FileSystemWatcher watcher = new FileSystemWatcher();
+        private static readonly FileSystemWatcher watcher = new FileSystemWatcher();
 
         public FileHelper(IConfiguration config)
         {
@@ -29,25 +22,21 @@ namespace DotaReplayViewer.Helpers
         public static void InitializeWatcher()
         {
             watcher.Path = ReplayFolder;
-            //watcher.Filter = ".dem";
-            watcher.Created += new FileSystemEventHandler(onAdd);
-            //watcher.Changed += new FileSystemEventHandler(onAdd);
+            watcher.Created += new FileSystemEventHandler(OnAdd);
             watcher.EnableRaisingEvents = true;
         }
 
-
-        private static void onAdd(object sender, FileSystemEventArgs e)
+        private static void OnAdd(object sender, FileSystemEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("detected file change");
         }
 
-
-        public static async Task DownloadAndUnzipReplay(string replayUrl, long matchID)
+        public static void DownloadAndUnzipReplay(string replayUrl, long matchID)
         {
             string compressedFilePath = ReplayFolder + "\\" + matchID + ".dem.bz2";
             string uncompressedFilePath = ReplayFolder + "\\" + matchID + ".dem";
-
             string[] filePaths = Directory.GetFiles(ReplayFolder);
+
             foreach (string filePath in filePaths)
             {
                 if (filePath.Equals(uncompressedFilePath))
@@ -59,7 +48,6 @@ namespace DotaReplayViewer.Helpers
 
             using (WebClient webClient = new WebClient())
             {
-                //File.Delete(Directory.GetFiles(ReplayFolder).Where(x => x.Equals(uncompressedFilePath)).FirstOrDefault());
                 webClient.DownloadFile(replayUrl, compressedFilePath);
 
                 using (FileStream fs = new FileInfo(compressedFilePath).OpenRead())
@@ -71,9 +59,10 @@ namespace DotaReplayViewer.Helpers
                     }
                     catch (Exception e)
                     {
-                        Debug.Write("something went wrong");
+                        Debug.Write("something went wrong: " + e.Message);
                     }
                 }
+
                 Debug.Write("deleting compressed file...");
                 System.IO.File.Delete(Directory.GetFiles(ReplayFolder).Where(x => x.Equals(compressedFilePath)).FirstOrDefault());
             }
