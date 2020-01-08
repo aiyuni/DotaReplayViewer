@@ -1,14 +1,32 @@
 ﻿import React, { useState } from 'react';
-import { Button } from '@material-ui/core';
+import { Button, Typography, TextField, Table, TableContainer, Paper, TableHead, TableBody, TableRow, TableCell, Box } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+    form: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        marginBottom: theme.spacing(2)
+    },
+    heroImage: {
+        marginRight: theme.spacing(2)
+    },
+    playersTable: {
+        marginBottom: theme.spacing(4)
+    }
+}));
 
 export default function Dota() {
-    const [matchId, setMatchId] = useState(0);
+    const [matchId, setMatchId] = useState('');
     const [players, setPlayers] = useState(null);
+
+    const classes = useStyles();
 
     const getMatchDetails = event => {
         event.preventDefault();
 
-        fetch('api/Dota/GetMatchDetails/' + this.state.matchId)
+        fetch('api/Dota/GetMatchDetails/' + matchId)
             .then(response => response.json())
             .then(result => {
                 console.log(result);
@@ -25,7 +43,7 @@ export default function Dota() {
         if (playerSlot >= 128) playerSlot -= 122;
         console.log("player slot is: " + playerSlot);
 
-        fetch('api/Dota/StartReplay/' + this.state.matchId + "/" + playerSlot)
+        fetch('api/Dota/StartReplay/' + matchId + "/" + playerSlot)
             .then(response => {
                 console.log("inside StartReplay fetch");
             })
@@ -33,39 +51,51 @@ export default function Dota() {
 
     return (
         <React.Fragment>
-            <Button variant="contained" color="primary">
-                Hello World
-            </Button>
-            <h1>Dota</h1>
+            <Typography variant="h6">Enter Match ID</Typography>
 
-            <form onSubmit={getMatchDetails}>
-                <label>
-                    Match Id:
-                    <input type="text" value={matchId} onChange={handleMatchIdChange} />
-                </label>
-                <input type="submit" value="Submit" />
+            <form className={classes.form} onSubmit={getMatchDetails}>
+                <TextField
+                    margin="normal"
+                    required
+                    id="matchId"
+                    label="Match ID"
+                    autoFocus
+                    value={matchId}
+                    onChange={handleMatchIdChange}
+                />
+                <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                >
+                    Search
+                </Button>
             </form>
 
             {players &&
-                <table className="table table-stripled">
-                    <thead>
-                        <tr>
-                            <th>Hero Name</th>
-                            <th>Player Slot</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {players.map((p, i) =>
-                            <tr onClick={() => onSelectHero(p.player_slot)} key={i}>
-                                <td>
-                                    <img src={`api/Dota/GetHeroImage/${p.hero.id}`} width="100px"/>
-                                    {p.hero.localized_name}
-                                </td>
-                                <td>{p.player_slot}</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+                <TableContainer className={classes.playersTable} component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Hero Name</TableCell>
+                                <TableCell>Player Slot</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {players.map((p, i) =>
+                                <TableRow onClick={() => onSelectHero(p.player_slot)} key={i}>
+                                    <TableCell>
+                                        <Box display="flex" flexDirection="row" alignItems="center">
+                                            <img className={classes.heroImage} src={`api/Dota/GetHeroImage/${p.hero.id}`} width="100px" />
+                                            <Typography variant="body1">{p.hero.localized_name}</Typography>
+                                        </Box>
+                                    </TableCell>
+                                    <TableCell>{p.player_slot}</TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             }
         </React.Fragment>
     );

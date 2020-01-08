@@ -25,7 +25,7 @@ export default function Layout(props) {
                     <Typography variant="h6">Dota Replay Viewer</Typography>
                 </Toolbar>
             </AppBar>
-            <Container>
+            <Container maxWidth="lg">
                 {props.children}
             </Container>
         </div>
