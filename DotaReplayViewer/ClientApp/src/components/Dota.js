@@ -1,4 +1,5 @@
 ﻿import React, { Component } from 'react';
+import "./Dota.css";
 
 export class Dota extends React.Component {
     static displayName = "hello dota"
@@ -50,7 +51,7 @@ export class Dota extends React.Component {
                 <form onSubmit={this.getMatchDetails}>
                     <label>
                         Match Id:
-                            <input type="text" value={this.state.value} onChange={this.handleMatchIdChange} />
+                        <input type="text" value={this.state.value} onChange={this.handleMatchIdChange} />
                     </label>
                     <input type="submit" value="Submit" />
                 </form>
@@ -66,7 +67,10 @@ export class Dota extends React.Component {
                         <tbody>
                             {this.state.players.map((p, i) =>
                                 <tr onClick={() => this.onSelectHero(p.player_slot)} key={i}>
-                                    <td>{p.hero.localized_name}</td>
+                                    <td>
+                                        <img className="hero-img" src={`api/Dota/GetHeroImage/${p.hero.id}`} width="100px"/>
+                                        {p.hero.localized_name}
+                                    </td>
                                     <td>{p.player_slot}</td>
                                 </tr>
                             )}

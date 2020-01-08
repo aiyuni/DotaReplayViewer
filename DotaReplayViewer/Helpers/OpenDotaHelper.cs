@@ -46,11 +46,11 @@ namespace DotaReplayViewer.Helpers
 
             foreach (var p in match.players)
             {
-                JObject player = new JObject();
+                JObject playerDetails = new JObject();
                 Hero hero = GetHeroFromId(p.hero_id);
-                player.Add("player_slot", p.player_slot);
-                player.Add("hero", JObject.FromObject(hero));
-                players.Add(player);
+                playerDetails.Add("player_slot", p.player_slot);
+                playerDetails.Add("hero", JObject.FromObject(hero));
+                players.Add(playerDetails);
             }
 
             matchDetails.Add("players", players);

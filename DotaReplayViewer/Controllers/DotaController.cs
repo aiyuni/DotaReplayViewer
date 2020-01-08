@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Runtime.InteropServices;
@@ -8,6 +9,7 @@ using DotaReplayViewer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Hosting;
 
 namespace DotaReplayViewer.Controllers
 {
@@ -17,7 +19,14 @@ namespace DotaReplayViewer.Controllers
     {
         [DllImport("user32.dll")]
         public static extern int SetForegroundWindow(IntPtr hWnd);
+
+        private readonly IHostingEnvironment hostingEnvironment;
         private static readonly HttpClient client = new HttpClient();
+
+        public DotaController(IHostingEnvironment hostingEnvironment)
+        {
+            this.hostingEnvironment = hostingEnvironment;
+        }
 
         [HttpGet("GetMatchDetails/{matchId}")]
         public async Task<IActionResult> GetMatchDetails(long matchId)
@@ -25,6 +34,17 @@ namespace DotaReplayViewer.Controllers
             Match match = await OpenDotaHelper.GetMatch(matchId);
             JObject matchDetails = OpenDotaHelper.GetMatchDetails(match);
             return Ok(JsonConvert.SerializeObject((matchDetails)));
+        }
+
+        [HttpGet("GetHeroImage/{heroId}")]
+        public IActionResult GetHeroImage(int heroId)
+        {
+            Hero hero = OpenDotaHelper.GetHeroFromId(heroId);
+            string contentRootPath = hostingEnvironment.ContentRootPath;
+            string file = Path.GetFullPath(Path.Combine(contentRootPath, Constants.HeroImagesPath, hero.img));
+            Console.WriteLine(file);
+            Byte[] bytes = System.IO.File.ReadAllBytes(file);
+            return File(bytes, "image/png");
         }
 
         [HttpGet("StartReplay/{matchId}/{playerSlot}")]
