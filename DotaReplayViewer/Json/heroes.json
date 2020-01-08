@@ -46,7 +46,7 @@
       "Disabler",
       "Jungler"
     ],
-    "img": "default.png",
+    "img": "axe.png",
     "icon": "/apps/dota2/images/heroes/axe_icon.png",
     "base_health": 200,
     "base_health_regen": 2.75,
@@ -1626,7 +1626,7 @@
       "Initiator",
       "Disabler"
     ],
-    "img": "vipper.png",
+    "img": "viper.png",
     "icon": "/apps/dota2/images/heroes/viper_icon.png",
     "base_health": 200,
     "base_health_regen": null,
@@ -2927,7 +2927,7 @@
       "Disabler",
       "Escape"
     ],
-    "img": "treeant.png",
+    "img": "treant_protector.png",
     "icon": "/apps/dota2/images/heroes/treant_icon.png",
     "base_health": 200,
     "base_health_regen": null,
@@ -3899,7 +3899,7 @@
       "Escape",
       "Disabler"
     ],
-    "img": "pheonix.png",
+    "img": "phoenix.png",
     "icon": "/apps/dota2/images/heroes/phoenix_icon.png",
     "base_health": 200,
     "base_health_regen": null,
@@ -4041,7 +4041,7 @@
       "Disabler",
       "Initiator"
     ],
-    "img": "mokey_king.png",
+    "img": "monkey_king.png",
     "icon": "/apps/dota2/images/heroes/monkey_king_icon.png",
     "base_health": 200,
     "base_health_regen": 1.5,
@@ -4151,7 +4151,7 @@
       "Disabler",
       "Escape"
     ],
-    "img": "grimstroker.png",
+    "img": "grimstroke.png",
     "icon": "/apps/dota2/images/heroes/grimstroke_icon.png",
     "base_health": 200,
     "base_health_regen": null,
