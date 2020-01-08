@@ -1,39 +1,27 @@
-﻿import React, { Component } from 'react';
-import "./Dota.css";
+﻿import React, { useState } from 'react';
+import { Button } from '@material-ui/core';
 
-export class Dota extends React.Component {
-    static displayName = "hello dota"
+export default function Dota() {
+    const [matchId, setMatchId] = useState(0);
+    const [players, setPlayers] = useState(null);
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            matchId: 0, players: null
-        }
-
-        this.getMatchDetails = this.getMatchDetails.bind(this);
-        this.handleMatchIdChange = this.handleMatchIdChange.bind(this);
-        this.onSelectHero = this.onSelectHero.bind(this);
-        this.render = this.render.bind(this);
-    }
-
-    getMatchDetails(event) {
+    const getMatchDetails = event => {
         event.preventDefault();
 
         fetch('api/Dota/GetMatchDetails/' + this.state.matchId)
             .then(response => response.json())
             .then(result => {
                 console.log(result);
-                this.setState({ players: result.players });
+                setPlayers(result.players);
             });
     }
 
-    handleMatchIdChange(event) {
+    const handleMatchIdChange = event => {
         console.log("match id was changed: " + event.target.value);
-        this.setState({ matchId: event.target.value });
+        setMatchId(event.target.value);
     }
 
-    onSelectHero(playerSlot) {
+    const onSelectHero = playerSlot => {
         if (playerSlot >= 128) playerSlot -= 122;
         console.log("player slot is: " + playerSlot);
 
@@ -43,42 +31,42 @@ export class Dota extends React.Component {
             })
     }
 
-    render() {
-        return (
-            <div>
-                <h1>Dota</h1>
+    return (
+        <React.Fragment>
+            <Button variant="contained" color="primary">
+                Hello World
+            </Button>
+            <h1>Dota</h1>
 
-                <form onSubmit={this.getMatchDetails}>
-                    <label>
-                        Match Id:
-                        <input type="text" value={this.state.value} onChange={this.handleMatchIdChange} />
-                    </label>
-                    <input type="submit" value="Submit" />
-                </form>
+            <form onSubmit={getMatchDetails}>
+                <label>
+                    Match Id:
+                    <input type="text" value={matchId} onChange={handleMatchIdChange} />
+                </label>
+                <input type="submit" value="Submit" />
+            </form>
 
-                {this.state.players &&
-                    <table className="table table-stripled">
-                        <thead>
-                            <tr>
-                                <th>Hero Name</th>
-                                <th>Player Slot</th>
+            {players &&
+                <table className="table table-stripled">
+                    <thead>
+                        <tr>
+                            <th>Hero Name</th>
+                            <th>Player Slot</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {players.map((p, i) =>
+                            <tr onClick={() => onSelectHero(p.player_slot)} key={i}>
+                                <td>
+                                    <img src={`api/Dota/GetHeroImage/${p.hero.id}`} width="100px"/>
+                                    {p.hero.localized_name}
+                                </td>
+                                <td>{p.player_slot}</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {this.state.players.map((p, i) =>
-                                <tr onClick={() => this.onSelectHero(p.player_slot)} key={i}>
-                                    <td>
-                                        <img className="hero-img" src={`api/Dota/GetHeroImage/${p.hero.id}`} width="100px"/>
-                                        {p.hero.localized_name}
-                                    </td>
-                                    <td>{p.player_slot}</td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                }
-
-            </div>
-        );
-    }
+                        )}
+                    </tbody>
+                </table>
+            }
+        </React.Fragment>
+    );
 }
