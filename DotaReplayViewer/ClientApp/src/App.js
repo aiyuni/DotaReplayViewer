@@ -8,8 +8,13 @@ import { blueGrey } from '@material-ui/core/colors';
 
 const theme = createMuiTheme({
     palette: {
-        type: 'dark',
-        primary: blueGrey
+        type: 'dark'
+    },
+    typography: {
+        h1: {
+            fontWeight: 500,
+            fontSize: 24
+        }
     }
 });
 

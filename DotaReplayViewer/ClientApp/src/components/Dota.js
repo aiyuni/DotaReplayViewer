@@ -1,78 +1,77 @@
-﻿import React, { useState } from 'react';
-import { Button, Typography, TextField, Table, TableContainer, Paper, TableHead, TableBody, TableRow, TableCell, Box } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+﻿import React, { useState, useEffect } from 'react';
+import { Button, Typography, TextField, Table, TableContainer, Paper, TableHead, TableBody, TableRow, TableCell, Box, Container } from '@material-ui/core';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
-    form: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        marginBottom: theme.spacing(2)
+    formContainer: {
+        textAlign: 'center',
+        padding: theme.spacing(4, 8)
     },
     heroImage: {
         marginRight: theme.spacing(2)
     },
     playersTable: {
         marginBottom: theme.spacing(4)
+    },
+    submit: {
+        margin: theme.spacing(1, 0, 0)
     }
 }));
 
+const CustomTextField = withStyles(theme => ({
+    root: {
+        '& label.Mui-focused': {
+            color: theme.palette.text.primary
+        }
+    }
+}))(TextField);
+
 export default function Dota() {
     const [matchId, setMatchId] = useState('');
-    const [players, setPlayers] = useState(null);
-
+    const [matchDetails, setMatchDetails] = useState(null);
+    useEffect(() => {
+        console.log(matchId);
+        getMatchDetails(matchId);
+    }, [matchId]); 
+    
     const classes = useStyles();
 
-    const getMatchDetails = event => {
-        event.preventDefault();
-
-        fetch('api/Dota/GetMatchDetails/' + matchId)
-            .then(response => response.json())
-            .then(result => {
-                console.log(result);
-                setPlayers(result.players);
-            });
+    const getMatchDetails = async matchId => {
+        const response = await fetch(`api/Dota/GetMatchDetails/${matchId}`);
+        const data = response.status === 200
+            ? await response.json()
+            : null;
+        console.log('data', data);
+        setMatchDetails(data);
     }
 
     const handleMatchIdChange = event => {
-        console.log("match id was changed: " + event.target.value);
-        setMatchId(event.target.value);
+        const matchId = event.target.value;
+        setMatchId(matchId);
     }
 
-    const onSelectHero = playerSlot => {
+    const handleSelectHero = async playerSlot => {
         if (playerSlot >= 128) playerSlot -= 122;
-        console.log("player slot is: " + playerSlot);
-
-        fetch('api/Dota/StartReplay/' + matchId + "/" + playerSlot)
-            .then(response => {
-                console.log("inside StartReplay fetch");
-            })
+        await fetch(`api/Dota/StartReplay/${matchDetails.matchId}/${playerSlot}`);
     }
 
     return (
         <React.Fragment>
-            <Typography variant="h6">Enter Match ID</Typography>
-
-            <form className={classes.form} onSubmit={getMatchDetails}>
-                <TextField
-                    margin="normal"
-                    required
-                    id="matchId"
-                    label="Match ID"
-                    autoFocus
-                    value={matchId}
-                    onChange={handleMatchIdChange}
-                />
-                <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                >
-                    Search
-                </Button>
-            </form>
-
-            {players &&
+            <Container className={classes.formContainer} maxWidth="xs">
+                <Typography variant="h5" gutterBottom>Enter Match ID</Typography>
+                <form>
+                    <CustomTextField
+                        inputProps={{ style: { textAlign: 'center' } }}
+                        fullWidth
+                        required
+                        id="matchId"
+                        autoFocus
+                        value={matchId}
+                        onChange={handleMatchIdChange}
+                    />
+                </form>
+            </Container>
+            {matchDetails &&
                 <TableContainer className={classes.playersTable} component={Paper}>
                     <Table>
                         <TableHead>
@@ -82,8 +81,8 @@ export default function Dota() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {players.map((p, i) =>
-                                <TableRow onClick={() => onSelectHero(p.player_slot)} key={i}>
+                            {matchDetails.players.map((p, i) =>
+                                <TableRow onClick={() => handleSelectHero(p.player_slot)} key={i}>
                                     <TableCell>
                                         <Box display="flex" flexDirection="row" alignItems="center">
                                             <img className={classes.heroImage} src={`api/Dota/GetHeroImage/${p.hero.id}`} width="100px" />
