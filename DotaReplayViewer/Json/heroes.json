@@ -3253,7 +3253,7 @@
       "Disabler",
       "Pusher"
     ],
-    "img": "vissage.png",
+    "img": "visage.png",
     "icon": "/apps/dota2/images/heroes/visage_icon.png",
     "base_health": 200,
     "base_health_regen": null,
