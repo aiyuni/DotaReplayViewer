@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Hosting;
+using System.Net;
 
 namespace DotaReplayViewer.Controllers
 {
@@ -32,6 +33,10 @@ namespace DotaReplayViewer.Controllers
         public async Task<IActionResult> GetMatchDetails(long matchId)
         {
             Match match = await OpenDotaHelper.GetMatch(matchId);
+
+            if (match == null)
+                return new NotFoundObjectResult(new { message = "404 Not Found" });
+
             JObject matchDetails = OpenDotaHelper.GetMatchDetails(match);
             return Ok(JsonConvert.SerializeObject((matchDetails)));
         }
