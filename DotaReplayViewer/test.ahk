@@ -12,14 +12,14 @@ TestSend()
 
 TestDota()
 {
-	Loop(10)
+	Loop, 10
 	{
 		Send, a
 		sleep, 2000
 		Send, b
 		sleep, 2000
 		Send, c
-		sleep 2000
+		sleep, 2000
 	}
 }
 

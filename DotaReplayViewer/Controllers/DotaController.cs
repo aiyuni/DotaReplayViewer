@@ -36,7 +36,9 @@ namespace DotaReplayViewer.Controllers
         {
             var ahk = new AutoHotkey.Interop.AutoHotkeyEngine();
             ahk.LoadFile(Constants.AhkRelativeFilePath);
-            ahk.ExecFunction("TestSend");
+            ahk.ExecFunction("TestDota");
+
+            Console.WriteLine("executed ahk?");
 
             return Ok(200);
         }

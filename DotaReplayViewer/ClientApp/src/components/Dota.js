@@ -36,20 +36,24 @@ export class Dota extends React.Component {
         //console.log("test: " + Object.keys(result));
         //this.setState({ heroNames: Object.keys(result) });
 
+         fetch('api/Dota/TestDota')
+             .then(response => {
+                 console.log("inside test dota");
+             })
 
-         fetch('api/Dota/GetMatchDetails/' + this.state.matchId)
-            .then(response => {
-                console.log("inside first fetch");
-                //this.setState({ heroNames: Object.keys(response.json()) });
-                response.json()
-                    .then(result => {
-                        console.log(result);
-                        console.log("hero Name result is: " + result[0]["heroName"])
-                        console.log("test: " + Object.entries(result));
-                        this.setState({ heroesArray: result });
-                        this.setState({ obtainedMatchData: true });
-                    })
-            })
+         //fetch('api/Dota/GetMatchDetails/' + this.state.matchId)
+         //   .then(response => {
+         //       console.log("inside first fetch");
+         //       //this.setState({ heroNames: Object.keys(response.json()) });
+         //       response.json()
+         //           .then(result => {
+         //               console.log(result);
+         //               console.log("hero Name result is: " + result[0]["heroName"])
+         //               console.log("test: " + Object.entries(result));
+         //               this.setState({ heroesArray: result });
+         //               this.setState({ obtainedMatchData: true });
+         //           })
+         //   })
         
         event.preventDefault();
     }
