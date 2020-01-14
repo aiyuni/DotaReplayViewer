@@ -10,6 +10,19 @@ TestSend()
 	return
 }
 
+TestDota()
+{
+	Loop(10)
+	{
+		Send, a
+		sleep, 2000
+		Send, b
+		sleep, 2000
+		Send, c
+		sleep 2000
+	}
+}
+
 WatchThisReplay(id, playerSlot)
 {
 	Send playdemo

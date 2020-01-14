@@ -31,6 +31,16 @@ namespace DotaReplayViewer.Controllers
 
         private static int matchDurationSeconds;
 
+        [HttpGet("TestDota")]
+        public async Task<IActionResult> GetTestDota()
+        {
+            var ahk = new AutoHotkey.Interop.AutoHotkeyEngine();
+            ahk.LoadFile(Constants.AhkRelativeFilePath);
+            ahk.ExecFunction("TestSend");
+
+            return Ok(200);
+        }
+
         [HttpGet("GetMatchDetails/{matchId}")]
         public async Task<IActionResult> GetMatchDetails(long matchId)
         {
