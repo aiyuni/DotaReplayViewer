@@ -1,22 +1,32 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { CssBaseline, ThemeProvider } from '@material-ui/core';
+import { createMuiTheme } from '@material-ui/core/styles';
 import { Route } from 'react-router';
-import { Layout } from './components/Layout';
-import { Home } from './components/Home';
-import { FetchData } from './components/FetchData';
-import { Counter } from './components/Counter';
-import { Dota } from './components/Dota';
+import Layout from './components/Layout';
+import Dota from './components/Dota';
+import { blueGrey } from '@material-ui/core/colors';
 
-export default class App extends Component {
-  static displayName = App.name;
+const theme = createMuiTheme({
+    palette: {
+        type: 'dark'
+    },
+    typography: {
+        h1: {
+            fontWeight: 500,
+            fontSize: 24
+        }
+    }
+});
 
-  render () {
+export default function App() {
     return (
-      <Layout>
-        <Route exact path='/' component={Dota} />
-        <Route path='/counter' component={Counter} />
-        <Route path='/fetch-data' component={FetchData} />
-        <Route path='/dota' component={Dota} />
-      </Layout>
+        <React.Fragment>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <Layout>
+                    <Route exact path='/' component={Dota} />
+                </Layout>
+            </ThemeProvider>
+        </React.Fragment>
     );
-  }
 }

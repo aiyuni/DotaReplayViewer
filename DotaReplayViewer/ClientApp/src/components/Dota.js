@@ -1,84 +1,101 @@
-﻿import React, { Component } from 'react';
-import "./Dota.css";
+﻿import React, { useState, useEffect } from 'react';
+import { Button, Typography, TextField, Table, TableContainer, Paper, TableHead, TableBody, TableRow, TableCell, Box, Container } from '@material-ui/core';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 
-export class Dota extends React.Component {
-    static displayName = "hello dota"
+const useStyles = makeStyles(theme => ({
+    formContainer: {
+        textAlign: 'center',
+        padding: theme.spacing(4, 8)
+    },
+    heroImage: {
+        marginRight: theme.spacing(2)
+    },
+    playersTable: {
+        marginBottom: theme.spacing(4)
+    },
+    submit: {
+        margin: theme.spacing(1, 0, 0)
+    }
+}));
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            matchId: 0, players: null
+const CustomTextField = withStyles(theme => ({
+    root: {
+        '& label.Mui-focused': {
+            color: theme.palette.text.primary
         }
+    }
+}))(TextField);
 
-        this.getMatchDetails = this.getMatchDetails.bind(this);
-        this.handleMatchIdChange = this.handleMatchIdChange.bind(this);
-        this.onSelectHero = this.onSelectHero.bind(this);
-        this.render = this.render.bind(this);
+export default function Dota() {
+    const [matchId, setMatchId] = useState('');
+    const [matchDetails, setMatchDetails] = useState(null);
+    useEffect(() => {
+        console.log(matchId);
+        getMatchDetails(matchId);
+    }, [matchId]); 
+    
+    const classes = useStyles();
+
+    const getMatchDetails = async matchId => {
+        const response = await fetch(`api/Dota/GetMatchDetails/${matchId}`);
+        const data = response.status === 200
+            ? await response.json()
+            : null;
+        console.log('data', data);
+        setMatchDetails(data);
     }
 
-    getMatchDetails(event) {
-        event.preventDefault();
-
-        fetch('api/Dota/GetMatchDetails/' + this.state.matchId)
-            .then(response => response.json())
-            .then(result => {
-                console.log(result);
-                this.setState({ players: result.players });
-            });
+    const handleMatchIdChange = event => {
+        const matchId = event.target.value;
+        setMatchId(matchId);
     }
 
-    handleMatchIdChange(event) {
-        console.log("match id was changed: " + event.target.value);
-        this.setState({ matchId: event.target.value });
-    }
-
-    onSelectHero(playerSlot) {
+    const handleSelectHero = async playerSlot => {
         if (playerSlot >= 128) playerSlot -= 122;
-        console.log("player slot is: " + playerSlot);
-
-        fetch('api/Dota/StartReplay/' + this.state.matchId + "/" + playerSlot)
-            .then(response => {
-                console.log("inside StartReplay fetch");
-            })
+        await fetch(`api/Dota/StartReplay/${matchDetails.matchId}/${playerSlot}`);
     }
 
-    render() {
-        return (
-            <div>
-                <h1>Dota</h1>
-
-                <form onSubmit={this.getMatchDetails}>
-                    <label>
-                        Match Id:
-                        <input type="text" value={this.state.value} onChange={this.handleMatchIdChange} />
-                    </label>
-                    <input type="submit" value="Submit" />
+    return (
+        <React.Fragment>
+            <Container className={classes.formContainer} maxWidth="xs">
+                <Typography variant="h5" gutterBottom>Enter Match ID</Typography>
+                <form>
+                    <CustomTextField
+                        inputProps={{ style: { textAlign: 'center' } }}
+                        fullWidth
+                        required
+                        id="matchId"
+                        autoFocus
+                        value={matchId}
+                        onChange={handleMatchIdChange}
+                    />
                 </form>
-
-                {this.state.players &&
-                    <table className="table table-stripled">
-                        <thead>
-                            <tr>
-                                <th>Hero Name</th>
-                                <th>Player Slot</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.state.players.map((p, i) =>
-                                <tr onClick={() => this.onSelectHero(p.player_slot)} key={i}>
-                                    <td>
-                                        <img className="hero-img" src={`api/Dota/GetHeroImage/${p.hero.id}`} width="100px"/>
-                                        {p.hero.localized_name}
-                                    </td>
-                                    <td>{p.player_slot}</td>
-                                </tr>
+            </Container>
+            {matchDetails &&
+                <TableContainer className={classes.playersTable} component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Hero Name</TableCell>
+                                <TableCell>Player Slot</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {matchDetails.players.map((p, i) =>
+                                <TableRow onClick={() => handleSelectHero(p.player_slot)} key={i}>
+                                    <TableCell>
+                                        <Box display="flex" flexDirection="row" alignItems="center">
+                                            <img className={classes.heroImage} src={`api/Dota/GetHeroImage/${p.hero.id}`} width="100px" />
+                                            <Typography variant="body1">{p.hero.localized_name}</Typography>
+                                        </Box>
+                                    </TableCell>
+                                    <TableCell>{p.player_slot}</TableCell>
+                                </TableRow>
                             )}
-                        </tbody>
-                    </table>
-                }
-
-            </div>
-        );
-    }
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            }
+        </React.Fragment>
+    );
 }

@@ -1,18 +1,32 @@
-import React, { Component } from 'react';
-import { Container } from 'reactstrap';
-import { NavMenu } from './NavMenu';
+import React from 'react';
+import { Container, AppBar, Typography, Toolbar } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-export class Layout extends Component {
-  static displayName = Layout.name;
+const useStyles = makeStyles(theme => ({
+    toolbar: {
+        padding: theme.spacing(1, 2),
+        display: 'flex',
+        justifyContent: 'center'
+    },
+    icon: {
+        marginRight: theme.spacing(1)
+    }
+}));
 
-  render () {
+export default function Layout(props) {
+    const classes = useStyles();
+
     return (
-      <div>
-        <NavMenu />
-        <Container>
-          {this.props.children}
-        </Container>
-      </div>
+        <div>
+            <AppBar position="static">
+                <Toolbar className={classes.toolbar}>
+                    <img className={classes.icon} src="/img/dota-2.svg" width="40px" />
+                    <Typography variant="h1">Dota Replay Viewer</Typography>
+                </Toolbar>
+            </AppBar>
+            <Container maxWidth="lg">
+                {props.children}
+            </Container>
+        </div>
     );
-  }
 }
